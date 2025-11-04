@@ -1,0 +1,193 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Título principal */
+h2 {
+  color: #1a1a1a;
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h3 {
+  color: #000000;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+/* Imagen Hero */
+.hero-image {
+  width: 100%;
+  max-width: 150px;
+  height: 100px;
+  border-radius: 15px;
+  margin: 0 auto 30px;
+  display: block;
+  box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
+  object-fit: cover;
+  border: 3px solid #2ecc71;
+}
+
+/* Formulario */
+form {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 2px solid #e8f5e9;
+}
+
+/* Secciones del formulario */
+form > div {
+  margin-bottom: 35px;
+  padding: 25px;
+  background: #f1f8f4;
+  border-radius: 10px;
+  border-left: 4px solid #2ecc71;
+}
+
+li{
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #333333;
+}
+
+/* Contenedor de cada campo */
+form > div > div {
+  margin-bottom: 20px;
+}
+
+/* Labels */
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #1a1a1a;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: capitalize;
+}
+
+/* Inputs y selects */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #d4edda;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  color: #1a1a1a;
+  transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+select:focus {
+  outline: none;
+  border-color: #2ecc71;
+  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15);
+}
+
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="number"]:hover,
+select:hover {
+  border-color: #27ae60;
+}
+
+/* Checkbox */
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #2ecc71;
+}
+
+/* Mensajes de error */
+p {
+  color: #c0392b;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+p::before {
+  content: "⚠";
+  font-size: 1rem;
+}
+
+/* Botón de envío */
+input[type="submit"] {
+  width: 100%;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+  margin-top: 20px;
+}
+
+input[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.6);
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+}
+
+input[type="submit"]:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(46, 204, 113, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #root {
+    padding: 10px;
+  }
+
+  form {
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  form > div {
+    padding: 15px;
+  }
+
+  .hero-image {
+    max-width: 120px;
+    height: 80px;
+  }
+}
