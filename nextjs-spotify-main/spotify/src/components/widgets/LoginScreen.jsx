@@ -1,13 +1,8 @@
 'use client';
 
-import { Music } from 'lucide-react';
 import { useState } from 'react';
 import { getSpotifyAuthUrl } from '@/lib/auth';
 
-/**
- * Pantalla de Login Pixel-Perfect
- * Implementa autenticación con Spotify OAuth siguiendo las especificaciones de diseño exactas
- */
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,29 +10,33 @@ export default function LoginScreen() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Login decorativo - la autenticación real es con Spotify
     handleSpotifyLogin();
   };
 
   const handleSpotifyLogin = () => {
     setIsLoading(true);
-    // Obtener la URL de autorización de Spotify
     const authUrl = getSpotifyAuthUrl();
-    // Redirigir a Spotify OAuth
     window.location.href = authUrl;
   };
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-[400px] flex flex-col justify-center">
-        {/* Logo Header */}
-        <div className="flex items-center gap-3 mb-10">
-          <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-blue-600/50">
-            <Music size={20} strokeWidth={2.5} />
-          </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">
-            MusicStream
-          </h1>
+    <main
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{
+        backgroundImage: "url('/IMG/estrella.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      <div className="w-full max-w-[400px] flex flex-col justify-center bg-purple-900/40 backdrop-blur-sm p-6 sm:p-8 md:p-10 rounded-3xl border-2 border-cyan-400/30 shadow-lg">
+        {/* Logo Header con imagen de título más grande */}
+        <div className="flex flex-col items-center gap-3 mb-8">
+          <img
+            src="/IMG/title.png"
+            alt="Calvo Galaxy"
+            className="w-64 max-w-full h-auto"
+            style={{ objectFit: 'contain' }}
+          />
         </div>
 
         {/* Main Content */}
@@ -52,7 +51,6 @@ export default function LoginScreen() {
 
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email Input */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-300 block">
                 Email or username
@@ -65,8 +63,6 @@ export default function LoginScreen() {
                 className="w-full rounded-lg bg-[#2a2a2a] border-none text-white placeholder-gray-500 py-3 px-4 focus:ring-2 focus:ring-blue-600 focus:outline-none transition-all"
               />
             </div>
-
-            {/* Password Input */}
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <label className="text-sm font-medium text-gray-300">
@@ -87,8 +83,6 @@ export default function LoginScreen() {
                 className="w-full rounded-lg bg-[#2a2a2a] border-none text-white placeholder-gray-500 py-3 px-4 focus:ring-2 focus:ring-blue-600 focus:outline-none transition-all"
               />
             </div>
-
-            {/* Login Button */}
             <button
               type="submit"
               disabled={isLoading}
@@ -98,17 +92,13 @@ export default function LoginScreen() {
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-700"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-black text-gray-500">OR</span>
-            </div>
+          {/* OR separator sin recuadro negro */}
+          <div className="flex items-center my-6">
+            <div className="flex-grow border-t border-gray-700"></div>
+            <span className="mx-4 text-gray-500 text-sm">OR</span>
+            <div className="flex-grow border-t border-gray-700"></div>
           </div>
 
-          {/* Spotify Login Button */}
           <button
             onClick={handleSpotifyLogin}
             disabled={isLoading}
@@ -125,7 +115,6 @@ export default function LoginScreen() {
             {isLoading ? 'Connecting...' : 'Continue with Spotify'}
           </button>
 
-          {/* Sign Up Link */}
           <p className="text-center text-gray-400 mt-6 text-sm">
             Don&apos;t have an account?{' '}
             <a
@@ -137,7 +126,6 @@ export default function LoginScreen() {
           </p>
         </div>
 
-        {/* Footer Note */}
         <div className="mt-8 text-center">
           <p className="text-xs text-gray-500">
             By continuing, you agree to MusicStream&apos;s{' '}

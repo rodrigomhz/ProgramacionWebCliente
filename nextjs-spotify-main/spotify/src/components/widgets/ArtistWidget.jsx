@@ -3,139 +3,111 @@
 import { useState, useEffect } from "react";
 import { getAccessToken } from "@/lib/auth";
 
+// Componente para buscar y seleccionar artistas favoritos
 export default function ArtistWidget() {
-  // 1º ESTADOS = Cajas donde guardas cosas
-  const [artists, setArtists] = useState([]);     // 📦 Lista de artistas encontrados
-  const [selected, setSelected] = useState([]);    // 📦 Tus favoritos
-  const [buscar, setBuscar] = useState("");        // 📦 Lo que escribes
+  // Estado para los artistas encontrados
+  const [artists, setArtists] = useState([]);
+  // Estado para los artistas favoritos seleccionados
+  const [selected, setSelected] = useState([]);
+  // Estado para el texto de búsqueda
+  const [search, setSearch] = useState("");
 
-  // 2º useEffect
+  // Al montar, cargar favoritos guardados en localStorage
   useEffect(() => {
-    // Esto pasa cuando la página carga
     const saved = localStorage.getItem('favorite_artists');
-    if (saved) {
-      setSelected(JSON.parse(saved));
-    }
+    if (saved) setSelected(JSON.parse(saved));
   }, []);
 
-  // Cargar artistas al inicio
+  // Al montar, buscar artistas de ejemplo (rock)
   useEffect(() => {
-    fetchArtists("genre:metal");
+    fetchArtists("genre:rock");
   }, []);
 
-  //Buscar mientras escribes
+  // Buscar artistas en Spotify cuando cambia el texto de búsqueda
   useEffect(() => {
-    // Esto pasa cada vez que "buscar" cambia
-    if (!buscar) {
-      fetchArtists("genre:metal");
+    if (!search) {
+      fetchArtists("genre:rock");
       return;
     }
-
     const timer = setTimeout(() => {
-      fetchArtists(buscar);
-    }, 200);
-
+      fetchArtists(search);
+    }, 300);
     return () => clearTimeout(timer);
-  }, [buscar]);
+  }, [search]);
 
-
-  // 3º fetchArtists = Pregunta a Spotify
+  // Buscar artistas en Spotify según el texto
   const fetchArtists = async (query) => {
-    // 🔑 Coge la llave
     const token = getAccessToken();
     if (!token) return;
-
-    // 📡 Pregunta a Spotify: "Dame artistas de: query"
-    const res = await fetch(`https://api.spotify.com/v1/search?type=artist&q=${query}&limit=8`,
+    const res = await fetch(
+      `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=20`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
-
     const data = await res.json();
-    if (!data.artists?.items) return;
-
-    setArtists(data.artists.items.map((a) => ({
-      id: a.id,
-      name: a.name,
-      image: a.images?.[0]?.url || "/default-image.jpg",
-    })));
+    setArtists(Array.isArray(data.artists?.items) ? data.artists.items : []);
   };
 
-  // 4º toggleSelect = Click en un artista
+  // Añadir o quitar artista de favoritos
   const toggleSelect = (artist) => {
     setSelected((prev) => {
       let newSelected;
-
-      // ¿Ya lo tienes?
       if (prev.find((a) => a.id === artist.id)) {
-        // SÍ → Quitarlo
         newSelected = prev.filter((a) => a.id !== artist.id);
-      // ¿Ya tienes 5?
-      } else if (prev.length >= 5) {
-        return prev;// No hacer nada
       } else {
-        newSelected = [...prev, artist];
+        newSelected = [...prev, {
+          id: artist.id,
+          name: artist.name,
+          image: artist.images && artist.images.length > 0 ? artist.images[0].url : '/IMG/default-playlist.png'
+        }];
       }
-
-      // Guardar en localStorage
       localStorage.setItem('favorite_artists', JSON.stringify(newSelected));
       return newSelected;
     });
   };
 
   return (
-    <div>
-      {/* Buscador */}
-      <div className="flex gap-4 mb-8">
+    <div
+      className="min-h-screen bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/IMG/estrella.jpg')" }}
+    >
+      <div className="min-h-screen bg-gradient-to-br from-indigo-950/80 via-purple-900/80 to-blue-950/80 p-8 -m-8">
+        {/* Título */}
+        <h1 className="text-4xl font-bold text-cyan-300 mb-8">Artistas</h1>
+
+        {/* Buscador de artistas */}
         <input
           type="text"
-          placeholder="Buscar artista..."
-          value={buscar}
-          onChange={(e) => setBuscar(e.target.value)}
-          className="flex-1 max-w-md px-4 py-3 rounded-full bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Buscar artista en Spotify"
+          className="mb-6 px-4 py-3 rounded-full bg-purple-900/50 text-white border-2 border-cyan-400/30 w-full max-w-md"
         />
-        <button
-          onClick={() => fetchArtists(buscar)}
-          className="px-6 py-3 bg-green-500 text-black font-semibold rounded-full hover:bg-green-400"
-        >
-          Buscar
-        </button>
-      </div>
 
-      {/* Artistas */}
-      <div className="grid grid-cols-4 gap-4">
-        {artists.map((artist) => (
-          <div
-            key={artist.id}
-            onClick={() => toggleSelect(artist)}
-            className={`p-4 rounded-xl cursor-pointer transition-all hover:scale-105 ${
-              selected.find((s) => s.id === artist.id)
-                ? "bg-green-600 ring-2 ring-green-400"
-                : "bg-gray-800 hover:bg-gray-700"
-            }`}
-          >
-            <img
-              src={artist.image}
-              alt={artist.name}
-              className="w-full aspect-square object-cover rounded-lg mb-2"
-            />
-            <p className="text-white text-center text-sm truncate">{artist.name}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Favoritos seleccionados */}
-      {selected.length > 0 && (
-        <div className="mt-6 p-4 bg-gray-800/50 rounded-xl">
-          <h3 className="text-white font-bold mb-3">⭐ Favoritos ({selected.length}/5)</h3>
-          <div className="flex flex-wrap gap-2">
-            {selected.map((a) => (
-              <span key={a.id} className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm">
-                {a.name}
+        {/* Lista de artistas encontrados */}
+        <div className="grid grid-cols-5 gap-6 mb-12">
+          {artists.map(artist => (
+            <div
+              key={artist.id}
+              onClick={() => toggleSelect(artist)}
+              className={`text-center group cursor-pointer transition-all hover:scale-105 ${
+                selected.find(a => a.id === artist.id)
+                  ? "bg-cyan-400/80 ring-4 ring-yellow-300 shadow-xl shadow-cyan-500/50"
+                  : "bg-purple-900/40 backdrop-blur-sm hover:bg-purple-800/50 border-2 border-cyan-400/30"
+              } p-4 rounded-3xl`}
+            >
+              <img
+                src={artist.images && artist.images.length > 0 ? artist.images[0].url : '/IMG/default-playlist.png'}
+                alt={artist.name}
+                className="w-full aspect-square object-cover rounded-full border-4 border-cyan-400 shadow-lg"
+              />
+              <p className="text-white text-sm truncate mt-2">{artist.name}</p>
+              <span className="block mt-2 text-xs text-cyan-300">
+                {selected.find(a => a.id === artist.id) ? 'Seleccionado' : 'Click para seleccionar'}
               </span>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -81,7 +81,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-64 right-0 h-16 bg-gray-900 border-b border-gray-800 px-6 flex items-center justify-between z-10">
+    <header className="fixed top-0 left-64 right-0 h-16 bg-gradient-to-r from-indigo-950/90 via-purple-900/90 to-blue-950/90 backdrop-blur-md border-b-2 border-cyan-400/30 px-6 flex items-center justify-between z-10 shadow-lg">
       
       {/* Buscador de canciones */}
       <div className="flex-1 max-w-md relative">
@@ -91,25 +91,26 @@ export default function Header() {
           value={buscar}
           onChange={(e) => setBuscar(e.target.value)}
           onFocus={() => buscar.trim() && setMostrar(true)}
-          className="w-full px-4 py-2 rounded-full bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+          onBlur={() => setTimeout(() => setMostrar(false), 200)}
+          className="w-full px-4 py-2 rounded-full bg-purple-900/50 backdrop-blur-sm text-white placeholder-cyan-300/50 border-2 border-cyan-400/30 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:border-yellow-300 transition-all"
         />
 
         {/* Dropdown con resultados de búsqueda */}
         {mostrar && resultados.length > 0 && (
-          <div className="absolute top-full mt-2 w-full bg-gray-800 rounded-lg shadow-xl max-h-96 overflow-y-auto z-50">
+          <div className="absolute top-full mt-2 w-full bg-indigo-950/95 backdrop-blur-md rounded-xl shadow-2xl shadow-cyan-500/30 border-2 border-cyan-400/30 max-h-96 overflow-y-auto z-50">
             {resultados.map((cancion, i) => (
               <div
                 key={i}
                 onClick={() => handleClick(cancion.id)}
-                className="flex items-center gap-3 p-3 hover:bg-gray-700 cursor-pointer"
+                className="flex items-center gap-3 p-3 hover:bg-purple-800/50 cursor-pointer transition-all border-b border-cyan-400/10 last:border-b-0"
               >
                 {/* Imagen del álbum */}
-                <img src={cancion.img} alt="" className="w-12 h-12 rounded object-cover" />
+                <img src={cancion.img} alt="" className="w-12 h-12 rounded-lg object-cover border-2 border-cyan-400/50" />
                 <div>
                   {/* Nombre de la canción */}
-                  <p className="text-white">{cancion.nombre}</p>
+                  <p className="text-white font-medium">{cancion.nombre}</p>
                   {/* Nombre del artista */}
-                  <p className="text-gray-400 text-xs">{cancion.artista}</p>
+                  <p className="text-cyan-300 text-xs">{cancion.artista}</p>
                 </div>
               </div>
             ))}
@@ -123,7 +124,7 @@ export default function Header() {
           <img 
             src={usuario.images[0].url}
             alt={usuario.display_name}
-            className="w-12 h-12 rounded-full object-cover cursor-pointer hover:ring-2 hover:ring-green-500"
+            className="w-12 h-12 rounded-full object-cover cursor-pointer border-4 border-cyan-400 hover:border-yellow-300 hover:scale-110 transition-all shadow-lg shadow-cyan-500/50"
           />
         )}
       </div>

@@ -23,6 +23,8 @@ export function getSpotifyAuthUrl() {
     'user-read-private',
     'user-read-email',
     'user-top-read',
+    'playlist-read-private',      // AÑADIR: Leer playlists privadas
+    'playlist-read-collaborative', // AÑADIR: Leer playlists colaborativas
     'playlist-modify-public',
     'playlist-modify-private'
   ].join(' ');
